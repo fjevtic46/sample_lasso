@@ -1,2 +1,3 @@
 ipynb_checkpoints
 results/2019-11-15/y_pred_test_alpha_10.000000_sample_lasso.npy
+results/2019-11-15/y_pred_trimmed_val_alpha_10.000000_LINCS_sample_lasso.npy
