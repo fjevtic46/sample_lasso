@@ -35,3 +35,9 @@ NOTE: If you wish to store all your slurm output and results in a scratch direct
 then replace all "results/" or "outputs/" paths in the three python files with the appropriate directory, and follow the structure
 of those two folders when making the directories within them (this is only if you really want to output your results/slurm.outs in
 an alternative location). 
+
+### References
+
+https://www.biorxiv.org/content/10.1101/2020.03.30.016675v1.abstract
+
+
