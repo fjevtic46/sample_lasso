@@ -12,34 +12,56 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial.distance import cosine
 import time
 import datetime
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+import random
 
+random.seed(1)
 ############################################################################################################
 
 # Hard code some of the paths
 
-data_fp = '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_TPM/' #Private data, working on getting iris data
+fp_data = '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_TPM/' #Private data, working on getting iris data
 fp_save = 'results/'# Recommend switching this to scratch directory path.
+
+
+
 
 ############################################################################################################
 
 #This section will split the data up in train, val, and test sets
-t0 = time.time()
-train = np.arcsinh(np.load(data_fp + 'GPL570subset_TrnExp.npy'))
-val   = np.arcsinh(np.load(data_fp + 'GPL570subset_ValExp.npy'))
-test  = np.arcsinh(np.load(data_fp + 'GPL570subset_TstExp.npy'))
+data = "GPL570" # worm GPL570
+
+if data == "GPL570":
+    t0 = time.time()
+    train = np.arcsinh(np.load(fp_data + data + 'subset_TrnExp.npy'))
+    val   = np.arcsinh(np.load(fp_data + data + 'subset_ValExp.npy'))
+    test  = np.arcsinh(np.load(fp_data + data + 'subset_TstExp.npy'))
+elif data == "worm":
+    t0 = time.time()
+    train = np.arcsinh(np.load("sample_data/" + data + '_TrnExp.npy'))
+    val   = np.arcsinh(np.load("sample_data/" + data + '_ValExp.npy'))
+    test  = np.arcsinh(np.load("sample_data/" + data + '_TstExp.npy'))
 
 # Load Gene indices for genes in  both GPL and Archs4 data for X and splits based on GPL splits between platforms
-X_gene_idx = np.loadtxt(data_fp + 'GPL570subset_LINCS_Xgenes_inds.txt',dtype=int)
-y_gene_idx = np.loadtxt(data_fp + 'GPL570subset_LINCS_ygenes_inds.txt',dtype=int)
-trim = np.load(data_fp + 'trimmed_down_val_set_inds.npy')
+
+if data == "GPL570":
+    X_gene_idx = np.loadtxt(fp_data + data + 'subset_LINCS_Xgenes_inds.txt',dtype=int)
+    y_gene_idx = np.loadtxt(fp_data+ data + 'subset_LINCS_ygenes_inds.txt',dtype=int)
+    trim = np.load(fp_data + 'trimmed_down_val_set_inds.npy')
+    
+elif data == "worm":
+    X_gene_idx = np.arange(0,50)
+    y_gene_idx = np.arange(50,100)
 
 # Make Splits
 X_train = np.transpose(train[:,X_gene_idx])
 y_train = np.transpose(train[:,y_gene_idx])
 X_val   = np.transpose(val[:,X_gene_idx])
 y_val   = np.transpose(val[:,y_gene_idx])
-X_val   = X_val[:,trim]
-y_val   = y_val[:,trim]
+if data == "GPL570":
+    X_val   = X_val[:,trim]
+    y_val   = y_val[:,trim]
 X_test  = np.transpose(test[:,X_gene_idx])
 y_test  = np.transpose(test[:,y_gene_idx])
 
@@ -84,9 +106,9 @@ if split1 == 'val':
         clf.fit(X_train,X_val[:,sample])
         print(clf.n_iter_)
         betas = clf.coef_
-        np.save(fp_save + date + '/betas_trimmed_LINCS_val_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),betas)
+        np.save(fp_save + date + '/'+data+'_betas_trimmed_LINCS_val_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),betas)
         y_pred_val = clf.predict(y_train)
-        np.save(fp_save + date + '/y_pred_trimmed_LINCS_val_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),y_pred_val)
+        np.save(fp_save + date + '/'+data+'_y_pred_trimmed_LINCS_val_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),y_pred_val)
         t2 = time.time()
         print('Time for model %i is:'%sample + str(datetime.timedelta(seconds=(t2-t1))))
 else:
@@ -103,9 +125,9 @@ if split2 == 'test':
         clf.fit(X_train,X_test[:,sample])
         print(clf.n_iter_)
         betas = clf.coef_
-        np.save(fp_save + date + '/betas_test_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),betas)
+        np.save(fp_save + date + '/'+data+'_betas_test_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),betas)
         y_pred_test = clf.predict(y_train)
-        np.save(fp_save + date + '/y_pred_test_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),y_pred_test)
+        np.save(fp_save + date + '/'+data+'_y_pred_test_model_%i_alpha_%f_sample_Lasso'%(sample,alpha),y_pred_test)
         t2 = time.time()
         print('Time for model %i is:'%sample + str(datetime.timedelta(seconds=(t2-t1))))
 else:

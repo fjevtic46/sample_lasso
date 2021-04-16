@@ -14,13 +14,28 @@ fp_data = '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_TPM/' # Pr
 fp = 'results/' # if you switched your directory to your scratch in the knitting script, change this to the scratch directory path
 #sp = '/mnt/research/compbio/krishnanlab/projects/ImpApproaches/results/Lasso/rnaseq-rnaseq/'
 sp = 'results/rnaseq-rnaseq/'
-val   = np.arcsinh(np.load(fp_data + 'GPL570subset_ValExp.npy'))
-test  = np.arcsinh(np.load(fp_data + 'GPL570subset_TstExp.npy'))
-y_gene_idx = np.loadtxt(fp_data + 'GPL570subset_LINCS_ygenes_inds.txt',dtype=int)
+
+data = "GPL570" # worm GPL570
+
+if data == "GPL570":
+    val   = np.arcsinh(np.load(fp_data + data + 'subset_ValExp.npy'))
+    test  = np.arcsinh(np.load(fp_data + data + 'subset_TstExp.npy'))
+elif data == "worm":
+    val   = np.arcsinh(np.load("sample_data/" + data + '_ValExp.npy'))
+    test  = np.arcsinh(np.load("sample_data/" + data + '_TstExp.npy'))
+    
+if data == "GPL570":
+    y_gene_idx = np.loadtxt(fp_data + data + 'subset_LINCS_ygenes_inds.txt',dtype=int)
+    trim = np.load(fp_data + 'trimmed_down_val_set_inds.npy')
+    
+elif data == "worm":
+    y_gene_idx = np.arange(50,100)
+
 y_val   = val[:,y_gene_idx]
 y_test  = test[:,y_gene_idx]
-trim = np.load(fp_data + 'trimmed_down_val_set_inds.npy')
-y_val = y_val[trim,:]
+if data == "GPL570":
+    y_val = y_val[trim,:]
+    
 parser = argparse.ArgumentParser()
 parser.add_argument('-alpha', type = float,
     help = 'alpha used for regression')
@@ -35,14 +50,15 @@ model           = args.model
 
 evals = ['val','test']
 df = pd.DataFrame(columns=['metric','value', 'model', 'hyperparameter', 'split'])
-test_missing  = np.load(fp + date +'/test_missing.npy').tolist()
-for eval in evals:
-	if eval == 'val':
+test_missing  = np.load(fp + date +'/'+ data +'_test_missing.npy').tolist()
+data_name = data
+for evaluation in evals:
+	if evaluation == 'val':
 		eval_data = y_val
-		data_path = fp + date + '/y_pred_trimmed_%s_alpha_%f_LINCS_sample_lasso.npy' % (eval,alpha)
-	elif eval == 'test':
+		data_path = fp + date + '/'+data_name+'_y_pred_trimmed_%s_alpha_%f_LINCS_sample_lasso.npy' % (evaluation,alpha)
+	elif evaluation == 'test':
 		eval_data = y_test
-		data_path = fp + date + '/y_pred_%s_alpha_%f_sample_lasso.npy' % (eval,alpha)
+		data_path = fp + date + "/" + data_name + '_y_pred_%s_alpha_%f_sample_lasso.npy' % (evaluation,alpha)
 		eval_data = np.delete(eval_data,test_missing,0)
 	else:
 		print('Error Occurred')
@@ -69,9 +85,9 @@ for eval in evals:
 	df2 = pd.melt(df2.T, value_vars = ['r2','mae','rmse','cvrmse','spearmanr','pearsonr','cosine'],var_name = 'metric',value_name = 'value')
 	df2['model'] = model
 	df2['hyperparameter'] = alpha
-	df2['split'] = eval
+	df2['split'] = evaluation
 	df2['data'] = 'trimmed'
 	df = df.append(df2)
-	print(eval)
-df.to_csv(sp + '%s/trimmed_%s_gene_evaluations_%s_%f.csv' % (model,"test_and_val",model,alpha))
+	print(evaluation)
+df.to_csv(sp + '%s/'%(model) +data_name+'_trimmed_%s_gene_evaluations_%s_%f.csv' % ("test_and_val",model,alpha))
 

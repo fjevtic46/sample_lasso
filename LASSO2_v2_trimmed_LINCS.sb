@@ -2,6 +2,7 @@
 ### define resources needed:
 ### Create Job Array
 #SBATCH --array=0-164
+#SBATCH --account=wang-krishnan
 ### Request the time you need the job to run for
 #SBATCH --time=03:59:00
 ### Request the total amount of memory you need
@@ -13,7 +14,7 @@
 ### Name your job
 #SBATCH --job-name=LASSO2
 
-#SBATCH --output=outputs/2019-11-15/slurm_%A_%a.out
+#SBATCH --output=outputs/slurms/slurm_%A_%a.out
 ### Now type is bash command that you need run
 ### For example I'm going to change directory to where a python
 ### script is and then run that script

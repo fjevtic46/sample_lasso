@@ -1,0 +1,30 @@
+#!/bin/bash -login
+### define resources needed:
+### Create Job Array
+#SBATCH --array=0-164
+#SBATCH --account=wang-krishnan
+### Request the time you need the job to run for
+#SBATCH --time=03:59:00
+### Request the total amount of memory you need
+#SBATCH --mem=75GB
+### Request the number of nodes you need
+#SBATCH --nodes=1
+### Request the number of cpus you need 
+#SBATCH --cpus-per-task=1
+### Name your job
+#SBATCH --job-name=LASSO2
+
+#SBATCH --output=outputs/slurms/slurm_%A_%a.out
+### Now type is bash command that you need run
+### For example I'm going to change directory to where a python
+### script is and then run that script
+### 956 jobs for val and 940 for test @ 14 models/job
+
+# split is either val or test or both
+python jb_LASSO2_v2_trimmed_LINCS.py -Nmodels 11 -start_model $SLURM_ARRAY_TASK_ID -alpha 10.0 -date 2019-11-15 -split both
+
+#Only submit next job by one item in the array 
+if [[ $SLURM_ARRAY_TASK_ID == 0 ]]; 
+then
+   sbatch --depend=afterok:$SLURM_ARRAY_JOB_ID jb_knitting_LASSO2.sb 
+fi

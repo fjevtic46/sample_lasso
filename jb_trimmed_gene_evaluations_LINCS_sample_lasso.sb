@@ -1,0 +1,23 @@
+#!/bin/bash -login
+### define resources needed:
+### Create Job Array
+
+### Request the time you need the job to run for
+#SBATCH --time=00:59:00
+#SBATCH --array=0-1
+#SBATCH --account=wang-krishnan
+### Request the total amount of memory you need
+#SBATCH --mem=50GB
+### Request the number of nodes you need
+#SBATCH --nodes=1
+### Request the number of cpus you need 
+#SBATCH --cpus-per-task=1
+### Name your job
+#SBATCH --job-name=LASSO2_eval
+
+#SBATCH --output=outputs/evaluations/gene_evals.out
+### Now type is bash command that you need run
+### For example I'm going to change directory to where a python
+### script is and then run that script
+
+python jb_trimmed_gene_evaluations_LINCS_sample_lasso.py -alpha 10.0 -date 2019-11-15 -model sample_LASSO -Nmodels $SLURM_ARRAY_TASK_ID

@@ -4,6 +4,7 @@
 
 ### Request the time you need the job to run for
 #SBATCH --time=00:59:00
+#SBATCH --account=wang-krishnan
 ### Request the total amount of memory you need
 #SBATCH --mem=50GB
 ### Request the number of nodes you need
@@ -18,4 +19,4 @@
 ### For example I'm going to change directory to where a python
 ### script is and then run that script
 
-python trimmed_gene_evaluations_LINCS_sample_lasso.py -alpha 10.0 -date 2019-11-15 -model sample_LASSO
+python trimmed_gene_evaluations_LINCS_sample_lasso.py -alpha 10.0 -date 2019-11-15 -model sample_LASSO -Nmodels 2

@@ -1,6 +1,4 @@
-Traceback (most recent call last):
-  File "trimmed_gene_evaluations_LINCS_sample_lasso.py", line 17, in <module>
-    val   = np.arcsinh(np.load(fp_data + 'GPL570subset_ValExp.npy'))
-  File "/mnt/home/colbrydi/anaconda3/lib/python3.6/site-packages/numpy/lib/npyio.py", line 428, in load
-    fid = open(os_fspath(file), "rb")
-PermissionError: [Errno 13] Permission denied: '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_TPM/GPL570subset_ValExp.npy'
+(1786, 15991) (1786, 15991)
+val
+(1786, 15991) (1786, 15991)
+test

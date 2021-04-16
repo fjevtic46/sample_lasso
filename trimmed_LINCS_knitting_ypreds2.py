@@ -17,13 +17,28 @@ fp_data           = '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_
 fp                = 'results/' # I recommend replacing this path with one in a scratch directory
 
 ######################################################################################################################################################################
+data = "GPL570" # worm GPL570
 
-val   = np.arcsinh(np.load(fp_data + 'GPL570subset_ValExp.npy'))
-test  = np.arcsinh(np.load(fp_data + 'GPL570subset_TstExp.npy'))
-y_gene_idx = np.loadtxt(fp_data + 'GPL570subset_LINCS_ygenes_inds.txt',dtype=int)
+
+if data == "GPL570":
+    val   = np.arcsinh(np.load(fp_data + data + 'subset_ValExp.npy'))
+    test  = np.arcsinh(np.load(fp_data + data + 'subset_TstExp.npy'))
+elif data == "worm":
+    val   = np.arcsinh(np.load("sample_data/" + data + '_ValExp.npy'))
+    test  = np.arcsinh(np.load("sample_data/" + data + '_TstExp.npy'))
+
+# Load Gene indices for genes in  both GPL and Archs4 data for X and splits based on GPL splits between platforms
+
+if data == "GPL570":
+    y_gene_idx = np.loadtxt(fp_data + data + 'subset_LINCS_ygenes_inds.txt',dtype=int)
+    trim = np.load(fp_data + 'trimmed_down_val_set_inds.npy')
+    
+elif data == "worm":
+    y_gene_idx = np.arange(50,100)
+
 y_val   = np.transpose(val[:,y_gene_idx])
-trim = np.load(fp_data + 'trimmed_down_val_set_inds.npy')
-y_val = y_val[:,trim]
+if data == "GPL570":
+    y_val = y_val[:,trim]
 y_test  = np.transpose(test[:,y_gene_idx])
 evals = ['val','test']
 print(np.shape(y_val))
@@ -53,15 +68,15 @@ for eval in evals:
         y_pred_val = [] 
         print(last_model)
         for model in range(start_model,last_model,1): 
-            if os.path.isfile(fp + date + '/y_pred_trimmed_LINCS_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha)): 
-                file_ = np.load(fp + date + '/y_pred_trimmed_LINCS_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha))
+            if os.path.isfile(fp + date + '/'+data+'_y_pred_trimmed_LINCS_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha)): 
+                file_ = np.load(fp + date + '/'+data+'_y_pred_trimmed_LINCS_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha))
                 y_pred_val.append(file_) 
             else: 
                 missing.append(model) 
                 continue 
         print(np.shape(y_pred_val))
-        np.save(fp + date + '/y_pred_trimmed_%s_alpha_%f_LINCS_sample_lasso.npy'%(eval,alpha),y_pred_val)
-        np.save(fp + date + '/%f_trimmed_%s_LINCS_missing.npy'%(alpha,eval),missing)
+        np.save(fp + date + '/'+data+'_y_pred_trimmed_%s_alpha_%f_LINCS_sample_lasso.npy'%(eval,alpha),y_pred_val)
+        np.save(fp + date + '/'+data+'%f_trimmed_%s_LINCS_missing.npy'%(alpha,eval),missing)
         print(np.shape(missing))
         print('trimmed_missing', np.shape(missing))
     elif eval == 'test':
@@ -70,14 +85,14 @@ for eval in evals:
         last_model  = np.shape(y_test)[1]
         y_pred_test = [] 
         for model in range(start_model,last_model,1): 
-            if os.path.isfile(fp + date + '/y_pred_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha)): 
-                file_ = np.load(fp + date + '/y_pred_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha)) 
+            if os.path.isfile(fp + date + '/'+data+'_y_pred_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha)): 
+                file_ = np.load(fp + date + '/'+data+'_y_pred_%s_model_%i_alpha_%f_sample_Lasso.npy'%(eval,model,alpha)) 
                 y_pred_test.append(file_) 
             else: 
                 missing.append(model) 
                 continue 
-        np.save(fp + date + '/y_pred_%s_alpha_%f_sample_lasso.npy'%(eval,alpha),y_pred_test)
-        np.save(fp + date + '/%s_missing.npy'%eval,missing)
+        np.save(fp + date + '/'+data+'_y_pred_%s_alpha_%f_sample_lasso.npy'%(eval,alpha),y_pred_test)
+        np.save(fp + date + '/'+data+'_%s_missing.npy'%eval,missing)
     else:
         print('Error occurred')
 
