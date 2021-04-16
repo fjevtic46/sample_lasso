@@ -21,3 +21,9 @@
 
 # split is either val or test or both
 python LASSO2_v2_trimmed_LINCS.py -Nmodels 11 -start_model $SLURM_ARRAY_TASK_ID -alpha 10.0 -date 2019-11-15 -split both
+
+#Only submit next job by one item in the array 
+if [[ $SLURM_ARRAY_TASK_ID == 0 ]]; 
+then
+   sbatch --depend=afterok:$SLURM_ARRAY_JOB_ID knitting_LASSO2.sb 
+fi

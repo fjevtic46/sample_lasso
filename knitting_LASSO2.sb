@@ -21,3 +21,5 @@
 
 ### choose test or val or both, and change alpha appropriately.
 python trimmed_LINCS_knitting_ypreds2.py -date 2019-11-15 -alpha 10.0 -split both
+
+sbatch trimmed_gene_evaluations_LINCS_sample_lasso.sb
