@@ -20,8 +20,7 @@ fp_data           = '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_
 fp                = 'results/'
 
 ######################################################################################################################################################################
-data = "GPL570" # worm GPL570
-
+data = "worm" # worm GPL570
 @jit
 def arc_sin(val,test):
     return np.arcsinh(val),np.arcsinh(test)

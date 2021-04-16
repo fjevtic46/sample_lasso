@@ -53,7 +53,7 @@ fp_save = 'results/'# Recommend switching this to scratch directory path.
 
 #This section will split the data up in train, val, and test sets
 
-data = "GPL570" # worm GPL570
+data = "worm" # worm GPL570
 
 @jit
 def arc_sin(train,val,test):

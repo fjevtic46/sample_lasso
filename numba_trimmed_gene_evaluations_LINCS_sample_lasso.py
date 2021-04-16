@@ -31,7 +31,7 @@ fp = 'results/' # if you switched your directory to your scratch in the knitting
 #sp = '/mnt/research/compbio/krishnanlab/projects/ImpApproaches/results/Lasso/rnaseq-rnaseq/'
 sp = 'results/rnaseq-rnaseq/'
 
-data = "GPL570" # worm GPL570
+data = "worm" # worm GPL570
 #@jit
 @njit(fastmath = True)
 def arc_sin(val,test):

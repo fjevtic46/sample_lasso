@@ -62,7 +62,7 @@ fp_save = 'results/'# Recommend switching this to scratch directory path.
 def arc_sin(train,val,test):
     return np.arcsinh(train),np.arcsinh(val),np.arcsinh(test)
 
-data = "GPL570" # worm GPL570
+data = "worm" # worm GPL570
 
 if data == "GPL570":
     t0 = time.time()

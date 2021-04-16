@@ -4,7 +4,7 @@
 
 ### Request the time you need the job to run for
 #SBATCH --time=00:59:00
-#SBATCH --account=wang-krishnan
+
 ### Request the total amount of memory you need
 #SBATCH --mem=100GB
 #SBATCH --array=0-1

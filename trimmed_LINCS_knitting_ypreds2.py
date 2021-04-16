@@ -17,7 +17,7 @@ fp_data           = '/mnt/research/compbio/krishnanlab/data/rnaseq/archs4/human_
 fp                = 'results/' # I recommend replacing this path with one in a scratch directory
 
 ######################################################################################################################################################################
-data = "GPL570" # worm GPL570
+data = "worm" # worm GPL570
 
 
 if data == "GPL570":

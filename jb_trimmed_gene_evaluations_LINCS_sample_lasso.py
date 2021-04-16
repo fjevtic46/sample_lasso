@@ -35,7 +35,7 @@ fp = 'results/'
 #sp = '/mnt/research/compbio/krishnanlab/projects/ImpApproaches/results/Lasso/rnaseq-rnaseq/'
 sp = 'results/rnaseq-rnaseq/'
 
-data = "GPL570" # worm GPL570
+data = "worm" # worm GPL570
 
 @jit
 def arc_sin(val,test):

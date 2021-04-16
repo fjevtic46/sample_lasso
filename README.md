@@ -25,6 +25,9 @@ The module is run in 3 steps. It is 3 separate sbatch files that are run one aft
 From the main sample_lasso directory, input commands into a dev-intel node on the HPCC as follows:
 
 "sbatch LASSO2_v2_trimmed_LINCS.sb" <- will generate many jobs, wait for all jobs to complete before proceeding (Should take no more than 7 min)
+
+The rest of the commands are run automatically, as they are called by the above command. However, if you wish to run knitting/eval separately,
+then you can run these commands.
 "sbatch knitting_LASSO2.sb" <- knits all prediction arrays into big ones for both test and val sets.
 "sbatch trimmed_gene_evaluations_LINCS_sample_lasso.sb" <- performs evaluation on test and val sets.
 

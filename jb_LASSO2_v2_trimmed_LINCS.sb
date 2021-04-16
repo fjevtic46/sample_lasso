@@ -2,7 +2,7 @@
 ### define resources needed:
 ### Create Job Array
 #SBATCH --array=0-164
-#SBATCH --account=wang-krishnan
+
 ### Request the time you need the job to run for
 #SBATCH --time=03:59:00
 ### Request the total amount of memory you need
